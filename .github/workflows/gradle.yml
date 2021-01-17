@@ -16,4 +16,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run Tests
-        run: ./gradlew test
+        run: ./gradlew test --stacktrace
