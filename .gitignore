@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Log Files ##
+spring-build.log
+spring-run.log
