@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.run.BootRun
 
 plugins {
 	id("org.springframework.boot") version "2.4.2"
@@ -37,4 +38,8 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.withType(BootRun::class) {
+	jvmArgs = listOf("-Xdebug", "-Xrunjdwp:transport=dt_socket,address=*:5005,server=y,suspend=n")
 }

@@ -9,6 +9,9 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 const val STOMP_ENDPOINT = "/connect"
 const val APPLICATION_DESTINATIONS = "/message"
 
+/**
+ * This is a configuration where we extend and override the base `WebSocketMessageBrokerConfigurer`
+ */
 @Configuration
 @EnableWebSocketMessageBroker
 class WebSocketConfig : WebSocketMessageBrokerConfigurer {
