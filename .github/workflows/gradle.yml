@@ -12,8 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: adoptopenjdk/openjdk15
+    container: gradle:6.7-jdk15
     steps:
       - uses: actions/checkout@v2
       - name: Run Tests
-        run: ./gradlew test
+        run: gradle test

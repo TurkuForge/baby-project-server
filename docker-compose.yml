@@ -1,0 +1,12 @@
+version: '3'
+services:
+  backend:
+    image: gradle:6.7-jdk15
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+      - "35729:35729"
+    volumes:
+      - ".:/app"
+      - ".gradle/container:/home/gradle"
+    command: sh -c "cd /app && sh setup.sh"

@@ -1,15 +1,13 @@
-package turku.forge.babyProject
+package turku.forge.babyproject
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class BabyProjectApplicationTests {
+class AppTests {
 
 	@Test
 	fun contextLoads() {
-		assertThat( true ).isTrue
 	}
 
 }
