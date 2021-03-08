@@ -10,7 +10,6 @@ import turku.forge.babyproject.config.SIMPLE_MESSAGE_BROKER_ENDPOINT
 import java.util.*
 
 @RestController
-@CrossOrigin(origins = ["*"])
 class ChannelController {
     @Autowired
     private lateinit var template: SimpMessagingTemplate

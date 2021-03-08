@@ -16,7 +16,6 @@ import turku.forge.babyproject.resources.Resource
 
 const val API_PATH = ""
 
-// @TODO: maybe move these relations to their own ENUM if needed
 const val WS_RELATION = "ws:connect"
 const val CHANNEL_RELATION = "channel"
 const val INDEX_RELATION = "index"
@@ -25,10 +24,8 @@ const val INDEX_RELATION = "index"
  * Rest control for the root of the api.
  * if you serve this api under `api.example.com` all the request going to `/`
  * will be routed to this controller.
- * @TODO: Figure out how to handle the CORS logic
  */
 @RestController
-@CrossOrigin( origins = ["*"])
 class RootApiController {
     @GetMapping(API_PATH)
     fun index(): ResponseEntity<IndexResource> {
@@ -50,7 +47,6 @@ class RootApiController {
     }
 
     private fun getChannels(): List<String> {
-        // @TODO: remove the hard coded channel names once we have a database and a way to create and store channels
         return listOf("general", "random")
     }
 }
