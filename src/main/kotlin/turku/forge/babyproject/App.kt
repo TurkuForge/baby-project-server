@@ -20,6 +20,11 @@ fun main(args: Array<String>) {
 }
 
 
+/**
+ * This class pulls in config properties from
+ * `application.yml` and serialises them so we can use them
+ * throughout the application
+ */
 @Configuration
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "spring.config")

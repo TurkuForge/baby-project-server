@@ -14,7 +14,8 @@ import turku.forge.babyproject.api.CHANNEL_PATH
 const val STOMP_ENDPOINT = "$API_PATH/connect"
 
 /**
- * This is a configuration where we extend and override the base `WebSocketMessageBrokerConfigurer`
+ * This class enables the Websockets broker witch
+ * is needed for two way communication
  */
 @Configuration
 @EnableWebSocketMessageBroker

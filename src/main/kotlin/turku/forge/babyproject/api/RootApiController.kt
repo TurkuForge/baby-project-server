@@ -23,9 +23,9 @@ const val CHANNEL_RELATION = "channel"
 const val INDEX_RELATION = "index"
 
 /**
- * Rest control for the root of the api.
- * if you serve this api under `api.example.com` all the request going to `/`
- * will be routed to this controller.
+ * This is the root reset controller
+ * any request coming in to the root will be
+ * handled by this controller
  */
 @RestController
 @RequestMapping(value = [API_PATH])
@@ -64,15 +64,12 @@ class RootApiController {
     }
 }
 
-/**
- * This is the index resource for this file
- * since we don't have any default values we want to pass from the root
- * as of yet we have no need to move this to its own file.
- */
+/** @see Resource */
 @Relation(INDEX_RELATION)
 @JsonInclude(Include.NON_NULL)
 class IndexResource : Resource<IndexResource>()
 
+/** @see Resource */
 @Relation(CHANNEL_RELATION)
 @JsonInclude(Include.NON_NULL)
 class ChannelResource(val name: String, val subscription: String? = null) : Resource<ChannelResource>()

@@ -6,10 +6,18 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.web.bind.annotation.*
+import turku.forge.babyproject.resources.Resource
 import java.util.*
 
 const val CHANNEL_PATH = "$API_PATH/channel"
 
+
+/**
+ * This is a rest controller for the channels
+ * channels anything that follows
+ * @see CHANNEL_PATH
+ * will be routed to this controller
+ */
 @RestController
 @RequestMapping( value = [CHANNEL_PATH] )
 class ChannelController {
@@ -28,12 +36,11 @@ class ChannelController {
     }
 }
 
-/**
- * A POJO for messages
- */
+/** @see Resource */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 class Message(val content: String, val sender: String)
 
+/** @see Resource */
 class OutputMessage(inComingMessage: Message) {
     val message: String = inComingMessage.content
     val from: String = inComingMessage.sender

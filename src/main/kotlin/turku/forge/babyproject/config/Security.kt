@@ -7,6 +7,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import turku.forge.babyproject.ConfigProperties
 
+/**
+ * This class enables security rules on the separate routes.
+ * currently a bit bare bones but this is where the route security should be handled
+ */
 @Configuration
 @EnableWebMvc
 class Security(
