@@ -8,10 +8,10 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer
 import turku.forge.babyproject.ConfigProperties
 import turku.forge.babyproject.api.API_PATH
+import turku.forge.babyproject.api.CHANNEL_PATH
 
 
 const val STOMP_ENDPOINT = "$API_PATH/connect"
-const val SIMPLE_MESSAGE_BROKER_ENDPOINT = "$API_PATH/channel"
 
 /**
  * This is a configuration where we extend and override the base `WebSocketMessageBrokerConfigurer`
@@ -23,7 +23,7 @@ class WebSocketConfig(
         private val config: ConfigProperties
 ) : WebSocketMessageBrokerConfigurer {
     override fun configureMessageBroker(config: MessageBrokerRegistry) {
-        config.enableSimpleBroker(SIMPLE_MESSAGE_BROKER_ENDPOINT)
+        config.enableSimpleBroker(CHANNEL_PATH)
     }
 
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
