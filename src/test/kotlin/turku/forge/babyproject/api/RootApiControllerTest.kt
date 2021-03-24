@@ -1,7 +1,5 @@
 package turku.forge.babyproject.api
 
-import jdk.jfr.Description
-import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -23,7 +21,8 @@ class RootApiControllerTest {
 
     @Test
     fun `Validates the http status code and json body`() {
-        val expectedResult = """{"_links":{"self":{"href":"http://localhost"},"ws:connect":{"href":"http://localhost/connect"}},"_embedded":{"channel":[{"name":"general","subscription":"/channel/general","_links":{"self":{"href":"http://localhost/channel/general"}}},{"name":"random","subscription":"/channel/random","_links":{"self":{"href":"http://localhost/channel/random"}}}]}}"""
+        val expectedResult =
+            """{"_links":{"self":{"href":"http://localhost"},"bp:sockjs-endpoint":{"href":"http://localhost/connect"}},"_embedded":{"bp:channel":[{"name":"general","subscription":"/channel/general","_links":{"self":{"href":"http://localhost/channel/general"}}},{"name":"random","subscription":"/channel/random","_links":{"self":{"href":"http://localhost/channel/random"}}}]}}"""
         mockMvc.perform(get("$API_PATH/"))
             .andExpect(status().isOk)
             .andExpect(content().json(expectedResult))

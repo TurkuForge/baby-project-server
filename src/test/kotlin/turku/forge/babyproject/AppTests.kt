@@ -10,15 +10,15 @@ import turku.forge.babyproject.api.RootApiController
 @SpringBootTest
 class AppTests {
 
-	@Autowired
-	lateinit var rootController: RootApiController
+    @Autowired
+    lateinit var rootController: RootApiController
 
-	@Autowired
-	lateinit var channelController: ChannelController
+    @Autowired
+    lateinit var channelController: ChannelController
 
-	@Test
-	fun `Validates context loads`() {
-		Assertions.assertThat(rootController).isNotNull
-		Assertions.assertThat(channelController).isNotNull
-	}
+    @Test
+    fun `Validates context loads`() {
+        Assertions.assertThat(rootController).isNotNull
+        Assertions.assertThat(channelController).isNotNull
+    }
 }

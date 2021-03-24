@@ -2,7 +2,11 @@ package turku.forge.babyproject.api
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonInclude.Include
+import org.springframework.hateoas.IanaLinkRelations
 import org.springframework.hateoas.LinkRelation
+import org.springframework.hateoas.RepresentationModel
+import org.springframework.hateoas.mediatype.hal.HalLinkRelation
+import org.springframework.hateoas.mediatype.hal.HalModelBuilder
 import org.springframework.hateoas.server.core.Relation
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder
 import org.springframework.hateoas.server.mvc.linkTo
@@ -11,16 +15,15 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import turku.forge.babyproject.CURIE_NAMESPACE
 import turku.forge.babyproject.config.STOMP_ENDPOINT
-import turku.forge.babyproject.resources.Resource
 
 // The request path for the root of the API
 const val API_PATH = ""
 
 // Relation constants
-const val WS_RELATION = "ws:connect"
-const val CHANNEL_RELATION = "channel"
-const val INDEX_RELATION = "index"
+val SOCK_JS_ENDPOINT = LinkRelation.of("sockjs-endpoint")
+val CHANNEL_RELATION = LinkRelation.of("channel")
 
 /**
  * This is the root reset controller
@@ -32,25 +35,27 @@ const val INDEX_RELATION = "index"
 class RootApiController {
     /**
      * Mapping for the root of the API
-     * This is the method that is ran when a request is fired at the root
+     * This is the method that is run when a request is fired at the root
      */
     @GetMapping()
-    fun index(): ResponseEntity<IndexResource> {
-        val resource = IndexResource()
-        resource.add(WebMvcLinkBuilder.linkTo(RootApiController::class.java).withSelfRel())
-        resource.add(
-            WebMvcLinkBuilder.linkTo(RootApiController::class.java)
-                .slash(STOMP_ENDPOINT)
-                .withRel(WS_RELATION)
-        )
-
-        val channelRelation = LinkRelation.of(CHANNEL_RELATION)
-        val channelCollection: Collection<ChannelResource> = getChannels().map {
+    fun index(): ResponseEntity<RepresentationModel<IndexResource>> {
+        val channels: Collection<ChannelResource> = getChannels().map {
             val link = linkTo<ChannelController> { message(it, null) }
             val channelResource = ChannelResource(it, link.toUriComponentsBuilder().build().path)
             channelResource.add(link.withSelfRel())
         }
-        resource.add(channelRelation, channelCollection)
+
+        val model = HalModelBuilder.halModel()
+            .embed(channels, HalLinkRelation.curied(CURIE_NAMESPACE, CHANNEL_RELATION.value()))
+        val resource = model.build<IndexResource>()
+
+        resource.add(
+            WebMvcLinkBuilder.linkTo(RootApiController::class.java)
+                .slash(STOMP_ENDPOINT)
+                .withRel(SOCK_JS_ENDPOINT)
+        )
+
+        resource.add(WebMvcLinkBuilder.linkTo(RootApiController::class.java).withSelfRel())
 
         return ResponseEntity(resource, HttpStatus.OK);
     }
@@ -64,12 +69,9 @@ class RootApiController {
     }
 }
 
-/** @see Resource */
-@Relation(INDEX_RELATION)
+@Relation(IanaLinkRelations.INDEX_VALUE)
 @JsonInclude(Include.NON_NULL)
-class IndexResource : Resource<IndexResource>()
+class IndexResource : RepresentationModel<IndexResource>()
 
-/** @see Resource */
-@Relation(CHANNEL_RELATION)
 @JsonInclude(Include.NON_NULL)
-class ChannelResource(val name: String, val subscription: String? = null) : Resource<ChannelResource>()
+class ChannelResource(val name: String, val subscription: String? = null) : RepresentationModel<ChannelResource>()

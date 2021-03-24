@@ -14,14 +14,14 @@ import turku.forge.babyproject.api.CHANNEL_PATH
 const val STOMP_ENDPOINT = "$API_PATH/connect"
 
 /**
- * This class enables the Websockets broker witch
+ * This class enables the Websockets broker which
  * is needed for two way communication
  */
 @Configuration
 @EnableWebSocketMessageBroker
 class WebSocketConfig(
-        @Autowired
-        private val config: ConfigProperties
+    @Autowired
+    private val config: ConfigProperties
 ) : WebSocketMessageBrokerConfigurer {
     override fun configureMessageBroker(config: MessageBrokerRegistry) {
         config.enableSimpleBroker(CHANNEL_PATH)

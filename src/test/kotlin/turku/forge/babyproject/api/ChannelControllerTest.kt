@@ -18,6 +18,7 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient
 import org.springframework.web.socket.messaging.WebSocketStompClient
 import org.springframework.web.socket.sockjs.client.SockJsClient
 import org.springframework.web.socket.sockjs.client.WebSocketTransport
+import turku.forge.babyproject.config.STOMP_ENDPOINT
 import java.lang.reflect.Type
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.TimeUnit
@@ -50,7 +51,7 @@ class ChannelControllerTest {
     fun `Validates the http and websocket communication mechanism`() {
         val blockingQueue = ArrayBlockingQueue<JsonNode>(1)
         val session = webSocketStompClient.connect(
-            "$localhost/connect",
+            "$localhost$STOMP_ENDPOINT",
             object : StompSessionHandlerAdapter() {})[1, TimeUnit.SECONDS]
 
         session.subscribe("$CHANNEL_PATH/general", object : StompFrameHandler {

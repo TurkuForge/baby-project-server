@@ -14,8 +14,8 @@ import turku.forge.babyproject.ConfigProperties
 @Configuration
 @EnableWebMvc
 class Security(
-        @Autowired
-        private val config: ConfigProperties
+    @Autowired
+    private val config: ConfigProperties
 ) : WebMvcConfigurer {
 
     override fun addCorsMappings(registry: CorsRegistry) {
