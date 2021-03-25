@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include
 import org.springframework.hateoas.IanaLinkRelations
 import org.springframework.hateoas.LinkRelation
 import org.springframework.hateoas.RepresentationModel
-import org.springframework.hateoas.mediatype.hal.HalLinkRelation
 import org.springframework.hateoas.mediatype.hal.HalModelBuilder
 import org.springframework.hateoas.server.core.Relation
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder
@@ -15,15 +14,12 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import turku.forge.babyproject.CURIE_NAMESPACE
 import turku.forge.babyproject.config.STOMP_ENDPOINT
 
 // The request path for the root of the API
 const val API_PATH = ""
 
-// Relation constants
 val SOCK_JS_ENDPOINT = LinkRelation.of("sockjs-endpoint")
-val CHANNEL_RELATION = LinkRelation.of("channel")
 
 /**
  * This is the root reset controller
@@ -39,14 +35,15 @@ class RootApiController {
      */
     @GetMapping()
     fun index(): ResponseEntity<RepresentationModel<IndexResource>> {
-        val channels: Collection<ChannelResource> = getChannels().map {
+        val model = HalModelBuilder.halModel()
+        getChannels().forEach {
             val link = linkTo<ChannelController> { message(it, null) }
-            val channelResource = ChannelResource(it, link.toUriComponentsBuilder().build().path)
-            channelResource.add(link.withSelfRel())
+            val channel = Channel(it, link.toUriComponentsBuilder().build().path)
+            channel.add(link.withSelfRel())
+            model.embed(channel)
         }
 
-        val model = HalModelBuilder.halModel()
-            .embed(channels, HalLinkRelation.curied(CURIE_NAMESPACE, CHANNEL_RELATION.value()))
+
         val resource = model.build<IndexResource>()
 
         resource.add(
@@ -74,4 +71,4 @@ class RootApiController {
 class IndexResource : RepresentationModel<IndexResource>()
 
 @JsonInclude(Include.NON_NULL)
-class ChannelResource(val name: String, val subscription: String? = null) : RepresentationModel<ChannelResource>()
+class Channel(val name: String, val subscription: String? = null) : RepresentationModel<Channel>()
