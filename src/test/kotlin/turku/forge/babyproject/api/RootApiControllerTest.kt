@@ -22,7 +22,7 @@ class RootApiControllerTest {
     @Test
     fun `Validates the http status code and json body`() {
         val expectedResult =
-            """{"_links":{"self":{"href":"http://localhost"},"bp:sockjs-endpoint":{"href":"http://localhost/connect"}},"_embedded":{"bp:channel":[{"name":"general","subscription":"/channel/general","_links":{"self":{"href":"http://localhost/channel/general"}}},{"name":"random","subscription":"/channel/random","_links":{"self":{"href":"http://localhost/channel/random"}}}]}}"""
+            """{"_links":{"self":{"href":"http://localhost"},"bp:sockjs-endpoint":{"href":"http://localhost/connect"}},"_embedded":{"bp:channelList":[{"name":"general","subscription":"/channel/general","_links":{"self":{"href":"http://localhost/channel/general"}}},{"name":"random","subscription":"/channel/random","_links":{"self":{"href":"http://localhost/channel/random"}}}]}}"""
         mockMvc.perform(get("$API_PATH/"))
             .andExpect(status().isOk)
             .andExpect(content().json(expectedResult))
