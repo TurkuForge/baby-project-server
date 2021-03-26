@@ -1,0 +1,4 @@
+babyproject:
+  config:
+    cors:
+      - '*'
