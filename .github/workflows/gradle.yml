@@ -5,12 +5,14 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     container: gradle:6.7-jdk15
     steps:
