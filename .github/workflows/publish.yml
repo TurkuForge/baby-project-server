@@ -1,0 +1,24 @@
+name: Publish Build Artifacts
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    container: gradle:6.7-jdk15
+    steps:
+      - name: Get Tag
+        id: data
+        run: echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+      - uses: actions/checkout@v2
+      - name: Run Jar Build
+        run: gradle bootJar
+      - uses: actions/upload-artifact@v2
+        with:
+          name: "baby-project-artifact-${{ steps.data.outputs.SOURCE_TAG }}"
+          path: ${{ github.workspace }}/build
+      - name: Build Finnished
+        run: echo "Artifact Published"
