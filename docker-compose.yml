@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   gradle:
-    image: gradle:6.7-jdk15
+    image: gradle:7.1-jdk16
     ports:
       - "8080:8080"
       - "5005:5005"

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include
 import org.springframework.hateoas.IanaLinkRelations
 import org.springframework.hateoas.LinkRelation
 import org.springframework.hateoas.RepresentationModel
-import turku.forge.babyproject.HalModelBuilder
+import org.springframework.hateoas.mediatype.hal.HalModelBuilder
 import org.springframework.hateoas.server.core.Relation
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder
 import org.springframework.hateoas.server.mvc.linkTo
