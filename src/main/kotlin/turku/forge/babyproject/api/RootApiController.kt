@@ -5,10 +5,11 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include
 import org.springframework.hateoas.IanaLinkRelations
 import org.springframework.hateoas.LinkRelation
 import org.springframework.hateoas.RepresentationModel
-import org.springframework.hateoas.mediatype.hal.HalModelBuilder
+import turku.forge.babyproject.HalModelBuilder
 import org.springframework.hateoas.server.core.Relation
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder
 import org.springframework.hateoas.server.mvc.linkTo
+import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,7 +19,7 @@ import turku.forge.babyproject.config.STOMP_ENDPOINT
 
 // The request path for the root of the API
 const val API_PATH = ""
-
+const val channelRel = "channel"
 val SOCK_JS_ENDPOINT = LinkRelation.of("sockjs-endpoint")
 
 /**
@@ -34,27 +35,26 @@ class RootApiController {
      * This is the method that is run when a request is fired at the root
      */
     @GetMapping()
-    fun index(): ResponseEntity<RepresentationModel<IndexResource>> {
+    fun index(): HttpEntity<RepresentationModel<IndexResource>> {
+        val link = linkTo<ChannelController> { message(null, null) }
+
         val model = HalModelBuilder.halModel()
+            .link(
+                WebMvcLinkBuilder.linkTo(RootApiController::class.java)
+                    .slash(STOMP_ENDPOINT)
+                    .withRel(SOCK_JS_ENDPOINT)
+            )
+            .link(WebMvcLinkBuilder.linkTo(RootApiController::class.java).withSelfRel())
+            .link(link.withRel(channelRel))
+
         getChannels().forEach {
-            val link = linkTo<ChannelController> { message(it, null) }
-            val channel = Channel(it, link.toUriComponentsBuilder().build().path)
-            channel.add(link.withSelfRel())
+            val channelLink = linkTo<ChannelController> { message(it, null) };
+            val channel = Channel(it, channelLink.toUriComponentsBuilder().build().path)
+            channel.add(channelLink.withSelfRel())
             model.embed(channel)
         }
 
-
-        val resource = model.build<IndexResource>()
-
-        resource.add(
-            WebMvcLinkBuilder.linkTo(RootApiController::class.java)
-                .slash(STOMP_ENDPOINT)
-                .withRel(SOCK_JS_ENDPOINT)
-        )
-
-        resource.add(WebMvcLinkBuilder.linkTo(RootApiController::class.java).withSelfRel())
-
-        return ResponseEntity(resource, HttpStatus.OK);
+        return ResponseEntity(model.build(), HttpStatus.OK);
     }
 
     /**
@@ -70,5 +70,9 @@ class RootApiController {
 @JsonInclude(Include.NON_NULL)
 class IndexResource : RepresentationModel<IndexResource>()
 
+@Relation(collectionRelation = channelRel)
 @JsonInclude(Include.NON_NULL)
-class Channel(val name: String, val subscription: String? = null) : RepresentationModel<Channel>()
+data class Channel(
+    val name: String,
+    val subscription: String? = null
+) : RepresentationModel<Channel>()
