@@ -22,9 +22,9 @@ class RootApiControllerTest {
     @Test
     fun `Validates the http status code and json body`() {
         val expectedResult =
-            """{"_links":{"self":{"href":"http://localhost"},"bp:sockjs-endpoint":{"href":"http://localhost/connect"}},"_embedded":{"bp:channelList":[{"name":"general","subscription":"/channel/general","_links":{"self":{"href":"http://localhost/channel/general"}}},{"name":"random","subscription":"/channel/random","_links":{"self":{"href":"http://localhost/channel/random"}}}]}}"""
+            """{"_embedded":{"bp:channel":[{"name":"general","subscription":"/channel/general","_links":{"self":{"href":"http://localhost/channel/general"}}},{"name":"random","subscription":"/channel/random","_links":{"self":{"href":"http://localhost/channel/random"}}}]},"_links":{"bp:sockjs-endpoint":{"href":"http://localhost/connect"},"self":{"href":"http://localhost"},"bp:channel":{"href":"http://localhost/channel/{channelName}","templated":true},"curies":[{"href":"https://docs.turkuforge.fi/{#rel}","name":"bp","templated":true}]}}""".trimIndent()
         mockMvc.perform(get("$API_PATH/"))
             .andExpect(status().isOk)
-            .andExpect(content().json(expectedResult))
+            .andExpect(content().json(expectedResult, true))
     }
 }
