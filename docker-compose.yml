@@ -1,6 +1,6 @@
-version: '3'
+version: '3.9'
 services:
-  backend:
+  gradle:
     image: gradle:6.7-jdk15
     ports:
       - "8080:8080"
@@ -8,5 +8,5 @@ services:
       - "35729:35729"
     volumes:
       - ".:/app"
-      - ".gradle/container:/home/gradle"
-    command: sh -c "cd /app && sh setup.sh"
+    working_dir: "/app"
+    entrypoint: "./docker-entrypoint.sh"

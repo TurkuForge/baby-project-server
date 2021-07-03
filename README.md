@@ -1,17 +1,36 @@
 # Getting Started
 Our dev environment can be used in two ways Docker or Local Installation
 - [With Docker](#docker) you don't need to worry about the dependencies needed to run the environment. All you need is Docker.
-- [With the local installation](#local-installation) you get more fine-grained control over your local environment E.g. Limiting the JVM heap size, specifying custom JVM args, and anything else you can come up with. But you have to maintain the local installation yourself. No additional services will be installed or started automatically.
+- [With the local installation](#local-installation) you get more fine-grained control over your local environment E.g. 
+  Limiting the JVM heap size, specifying custom JVM args, and anything else you can come up with. But you have to maintain 
+  the local installation yourself. No additional services will be installed or started automatically.
+  
+Docker creates OS-level virtualization which allows it to function in it own contained environment and does not touch any
+of your computer files. The local installation does touch some of our your computers own files, but you get the benefit of
+speed. Since Docker always creates a new container each time you run a command it is naturally slower than if you run the 
+commands without virtualization and locally stored caches.
 
 ## Setup
 ### Docker
 
-We set up our Docker environment to be easy to work with. When you start the container it will start a process that listens for change under your classpath, 
-once a change is detected it will automatically rebuild the changed files and restart the servlet container (in our case Tomcat). This allows a simple and easy development process because you never have to rebuild manually, the container knows what it needs to do and it does it for you.
+We set up our Docker environment to be easy to work with. When you start the container it will start a process that listens 
+for change under your classpath, once a change is detected it will automatically rebuild the changed files and restart the
+servlet container (in our case Tomcat). This allows a simple and easy development process because you never have to rebuild manually, 
+the container knows what it needs to do and it does it for you.
 
 To use Docker, follow these steps:
 1. Run `docker-compose up -d`
 1. Then navigate to `http://localhost:8080/` in your browser to see the application running.
+
+If you want to run tests it's as easy as 
+```shell
+docker-compose run gradle test
+``` 
+If you want to do test driven development you can run 
+```shell
+docker-compose run gradle -t test
+```
+the `-t` watches for changes and runs the same command again when a change happens.
 
 **NOTE: The first time you run the docker-compose command it will take a bit longer to start so be patient**
 
@@ -24,19 +43,23 @@ to keep your local environment up to date and check this guide periodically so y
 To install locally, follow these steps:
 1. Install Java 15
     1. Pro Tip: To manage multiple versions of Java, you can use [Jenv](https://www.jenv.be/).
-1. Run `./setup.sh`
+1. Run `./gradlew bootRun`
 1. Navigate to `http://localhost:8080/` in your browser to see the application running
 
+If you want to run tests it's as easy as `./gradlew test`. If you want to do test driven development you can run `./gradlew -t test`
+the `-t` watches for changes and runs the same command again when a change happens.
+
 ## After setup
-Once everything is working and you have navigated to `http://localhost:8080/` you should see the root API resource in a `hal+json` format. If you don't see that check the [troubleshooting section](#troubleshooting).
+Once everything is working, and you have navigated to `http://localhost:8080/` you should see the root API resource in a `hal+json` format. If you don't see that check the [troubleshooting section](#troubleshooting).
 
 ## Troubleshooting
-When `setup.sh` runs it will output two log files `spring-build.log` and `spring-run.log` (we recommend running
+When `docker-entrypoint.sh` runs it will output two log files `spring-build.log` and `spring-run.log` (we recommend running
 `tail -f` on these files for a more detailed output). 
 
 The logs will give you more information about what is going on inside the application.
-- `spring-build.log` informs you in case you have any compile-time errors happening in your code such as syntax or type errors, missing dependencies, etc.
-- `spring-run.log` informs you about the runtime errors such as webserver exceptions and the Tomcat access log.
+- `spring-build.log` informs you in case you have any compile-time errors happening in your code such as syntax or type errors, 
+  missing dependencies, etc.
+- `spring-run.log` informs you about the runtime errors such as webserver exceptions, and the Tomcat access log.
 
 If you are having any issues setting up odds are one of these two files will tell you what you need to do.
 
@@ -46,7 +69,7 @@ this allows you to add breakpoints in your code witch get triggered when that pa
 
 (Check the documentation for your code editor or IDE for more information about how to set up JPDA). 
 
-These are the JVM args we use to enable JPDA:
+These are the JVM args we used to enable JPDA:
 ```shell
 -Xdebug -Xrunjdwp:transport=dt_socket,address=*:5005,server=y,suspend=n
 ```

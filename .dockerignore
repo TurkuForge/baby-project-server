@@ -1,0 +1,10 @@
+.github/
+.gradle/
+.idea/
+build/
+out/
+.gitignore
+.java-version
+gradlew
+gradlew.bat
+README.md
