@@ -14,7 +14,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: gradle:6.7-jdk15
+    container: gradle:7.2.0-jdk17
     steps:
       - uses: actions/checkout@v2
       - name: Run Tests
